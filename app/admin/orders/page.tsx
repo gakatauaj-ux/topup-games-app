@@ -1,7 +1,11 @@
 import { prisma } from "@/lib/prisma"
 import { formatPrice } from "@/lib/utils"
+import { unstable_noStore } from "next/cache"
+
+export const dynamic = "force-dynamic"
 
 async function getOrders() {
+  unstable_noStore()
   return await prisma.order.findMany({
     include: {
       user: {

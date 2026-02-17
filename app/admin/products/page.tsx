@@ -2,8 +2,12 @@ import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { formatPrice } from "@/lib/utils"
 import { Plus, Edit, Trash2 } from "lucide-react"
+import { unstable_noStore } from "next/cache"
+
+export const dynamic = "force-dynamic"
 
 async function getProducts() {
+  unstable_noStore()
   return await prisma.product.findMany({
     include: {
       category: true,

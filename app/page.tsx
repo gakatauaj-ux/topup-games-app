@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 import { Gamepad2, Zap, Shield, Clock } from "lucide-react"
+import { unstable_noStore } from "next/cache"
+
+export const dynamic = "force-dynamic"
 
 async function getCategories() {
   return await prisma.category.findMany({
@@ -16,6 +19,7 @@ async function getCategories() {
 }
 
 export default async function HomePage() {
+  unstable_noStore()
   const categories = await getCategories()
 
   return (

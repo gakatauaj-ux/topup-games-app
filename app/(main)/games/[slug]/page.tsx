@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import GameDetailClient from "./client"
+import { unstable_noStore } from "next/cache"
+
+export const dynamic = "force-dynamic"
 
 interface GamePageProps {
   params: {
@@ -9,6 +12,7 @@ interface GamePageProps {
 }
 
 async function getGameData(slug: string) {
+  unstable_noStore()
   const category = await prisma.category.findUnique({
     where: { slug, isActive: true },
     include: {

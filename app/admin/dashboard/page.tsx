@@ -6,8 +6,12 @@ import {
   Users,
   TrendingUp,
 } from "lucide-react"
+import { unstable_noStore } from "next/cache"
+
+export const dynamic = "force-dynamic"
 
 async function getStats() {
+  unstable_noStore()
   const [
     totalOrders,
     totalProducts,
