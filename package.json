@@ -18,9 +18,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.2",
     "@next-auth/prisma-adapter": "^1.0.7",
-    "@prisma/adapter-neon": "^5.22.0",
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-slot": "^1.2.4",
     "bcryptjs": "^3.0.3",
