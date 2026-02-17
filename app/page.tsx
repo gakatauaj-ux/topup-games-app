@@ -80,7 +80,7 @@ export default async function HomePage() {
       <section id="games" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-12">Pilih Game</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category) => (
+          {categories.map((category: { id: string; slug: string; image: string | null; name: string; description: string | null; products: { id: string }[] }) => (
             <Link
               key={category.id}
               href={`/games/${category.slug}`}
