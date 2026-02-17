@@ -4,8 +4,8 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
-    "DATABASE_URL": "postgresql://postgres:[YOUR-PASSWORD]@db.pyjtknqykqxhwulntokd.supabase.co:5432/postgres",
-    "DIRECT_URL": "postgresql://postgres:[YOUR-PASSWORD]@db.pyjtknqykqxhwulntokd.supabase.co:5432/postgres",
+    "DATABASE_URL": "postgresql://postgres:TopupGames2024!@db.pyjtknqykqxhwulntokd.supabase.co:5432/postgres",
+    "DIRECT_URL": "postgresql://postgres:TopupGames2024!@db.pyjtknqykqxhwulntokd.supabase.co:5432/postgres",
     "NEXTAUTH_SECRET": "topup-games-secret-key-2024-secure-random-string",
     "MIDTRANS_SERVER_KEY": "SB-Mid-server-xxxxxxxxxxxxxxxx",
     "MIDTRANS_CLIENT_KEY": "SB-Mid-client-xxxxxxxxxxxxxxxx",
