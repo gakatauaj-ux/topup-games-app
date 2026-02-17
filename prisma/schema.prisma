@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -45,11 +45,11 @@ model User {
   image         String?
   password      String?
   role          String    @default("USER")
-  accounts      Account[]
-  sessions      Session[]
-  orders        Order[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  orders        Order[]
+  sessions      Session[]
 
   @@index([email])
 }
@@ -69,9 +69,9 @@ model Category {
   description String?
   image       String?
   isActive    Boolean   @default(true)
-  products    Product[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  products    Product[]
 
   @@index([slug])
   @@index([isActive])
@@ -84,11 +84,11 @@ model Product {
   description String?
   image       String?
   categoryId  String
-  category    Category         @relation(fields: [categoryId], references: [id])
-  variants    ProductVariant[]
   isActive    Boolean          @default(true)
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
+  category    Category         @relation(fields: [categoryId], references: [id])
+  variants    ProductVariant[]
 
   @@index([slug])
   @@index([categoryId])
@@ -96,17 +96,17 @@ model Product {
 }
 
 model ProductVariant {
-  id           String      @id @default(cuid())
-  name         String
-  price        Int
-  stock        Int         @default(0)
-  sku          String      @unique
-  productId    String
-  product      Product     @relation(fields: [productId], references: [id])
-  orderItems   OrderItem[]
-  isActive     Boolean     @default(true)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id         String      @id @default(cuid())
+  name       String
+  price      Int
+  stock      Int         @default(0)
+  sku        String      @unique
+  productId  String
+  isActive   Boolean     @default(true)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+  product    Product     @relation(fields: [productId], references: [id])
 
   @@index([productId])
   @@index([sku])
@@ -114,16 +114,16 @@ model ProductVariant {
 }
 
 model Order {
-  id          String        @id @default(cuid())
+  id          String       @id @default(cuid())
   userId      String
-  user        User          @relation(fields: [userId], references: [id])
   totalAmount Int
-  status      String   @default("PENDING")
+  status      String       @default("PENDING")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id])
   items       OrderItem[]
-  transaction Transaction?
   topupData   TopupData?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  transaction Transaction?
 
   @@index([userId])
   @@index([status])
@@ -133,28 +133,28 @@ model Order {
 model OrderItem {
   id               String         @id @default(cuid())
   orderId          String
-  order            Order          @relation(fields: [orderId], references: [id])
   productVariantId String
-  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
   quantity         Int
   price            Int
+  order            Order          @relation(fields: [orderId], references: [id])
+  productVariant   ProductVariant @relation(fields: [productVariantId], references: [id])
 
   @@index([orderId])
   @@index([productVariantId])
 }
 
 model Transaction {
-  id                String            @id @default(cuid())
-  orderId           String            @unique
-  order             Order             @relation(fields: [orderId], references: [id])
-  midtransOrderId   String            @unique
+  id                String    @id @default(cuid())
+  orderId           String    @unique
+  midtransOrderId   String    @unique
   paymentType       String?
-  transactionStatus String @default("PENDING")
+  transactionStatus String    @default("PENDING")
   grossAmount       Int
   paymentToken      String?
   paidAt            DateTime?
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  order             Order     @relation(fields: [orderId], references: [id])
 
   @@index([orderId])
   @@index([midtransOrderId])
@@ -164,13 +164,13 @@ model Transaction {
 model TopupData {
   id        String   @id @default(cuid())
   orderId   String   @unique
-  order     Order    @relation(fields: [orderId], references: [id])
   gameId    String
   serverId  String?
   username  String?
   nickname  String?
   notes     String?
   createdAt DateTime @default(now())
+  order     Order    @relation(fields: [orderId], references: [id])
 
   @@index([orderId])
 }

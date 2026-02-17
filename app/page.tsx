@@ -1,26 +1,39 @@
-import { prisma } from "@/lib/prisma"
+"use client"
+
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Gamepad2, Zap, Shield, Clock } from "lucide-react"
-import { unstable_noStore } from "next/cache"
 
-export const dynamic = "force-dynamic"
-
-async function getCategories() {
-  return await prisma.category.findMany({
-    where: { isActive: true },
-    include: {
-      products: {
-        where: { isActive: true },
-        select: { id: true },
-      },
-    },
-    orderBy: { name: "asc" },
-  })
+interface Category {
+  id: string
+  slug: string
+  image: string | null
+  name: string
+  description: string | null
+  products: { id: string }[]
 }
 
-export default async function HomePage() {
-  unstable_noStore()
-  const categories = await getCategories()
+export default function HomePage() {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await fetch("/api/categories")
+        if (response.ok) {
+          const data = await response.json()
+          setCategories(data)
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCategories()
+  }, [])
 
   return (
     <div className="space-y-16">
@@ -79,45 +92,53 @@ export default async function HomePage() {
       {/* Games Section */}
       <section id="games" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-12">Pilih Game</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category: { id: string; slug: string; image: string | null; name: string; description: string | null; products: { id: string }[] }) => (
-            <Link
-              key={category.id}
-              href={`/games/${category.slug}`}
-              className="group block bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
-            >
-              <div className="aspect-video bg-gray-200 relative">
-                {category.image ? (
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500">
-                    <Gamepad2 className="w-16 h-16 text-white" />
-                  </div>
-                )}
-              </div>
-              <div className="p-6">
-                <h3 className="font-bold text-xl mb-2 group-hover:text-blue-600 transition-colors">
-                  {category.name}
-                </h3>
-                <p className="text-gray-600 text-sm mb-4">
-                  {category.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500">
-                    {category.products.length} produk
-                  </span>
-                  <span className="text-blue-600 font-medium text-sm">
-                    Top Up →
-                  </span>
+        
+        {loading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-600">Memuat game...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {categories.map((category) => (
+              <Link
+                key={category.id}
+                href={`/games/${category.slug}`}
+                className="group block bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow"
+              >
+                <div className="aspect-video bg-gray-200 relative">
+                  {category.image ? (
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-500">
+                      <Gamepad2 className="w-16 h-16 text-white" />
+                    </div>
+                  )}
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+                <div className="p-6">
+                  <h3 className="font-bold text-xl mb-2 group-hover:text-blue-600 transition-colors">
+                    {category.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    {category.description}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500">
+                      {category.products.length} produk
+                    </span>
+                    <span className="text-blue-600 font-medium text-sm">
+                      Top Up →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* How to Buy Section */}
