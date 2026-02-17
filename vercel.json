@@ -1,14 +1,14 @@
 {
-  "buildCommand": "prisma generate && next build",
+  "version": 2,
+  "buildCommand": "prisma generate && prisma migrate deploy && next build",
   "installCommand": "npm install",
   "framework": "nextjs",
   "env": {
-    "NEXTAUTH_URL": "@nextauth_url",
-    "NEXTAUTH_SECRET": "@nextauth_secret",
-    "DATABASE_URL": "@database_url",
-    "DIRECT_URL": "@direct_url",
-    "MIDTRANS_SERVER_KEY": "@midtrans_server_key",
-    "MIDTRANS_CLIENT_KEY": "@midtrans_client_key",
-    "MIDTRANS_IS_PRODUCTION": "@midtrans_is_production"
+    "DATABASE_URL": "postgresql://postgres:[YOUR-PASSWORD]@db.pyjtknqykqxhwulntokd.supabase.co:5432/postgres",
+    "DIRECT_URL": "postgresql://postgres:[YOUR-PASSWORD]@db.pyjtknqykqxhwulntokd.supabase.co:5432/postgres",
+    "NEXTAUTH_SECRET": "topup-games-secret-key-2024-secure-random-string",
+    "MIDTRANS_SERVER_KEY": "SB-Mid-server-xxxxxxxxxxxxxxxx",
+    "MIDTRANS_CLIENT_KEY": "SB-Mid-client-xxxxxxxxxxxxxxxx",
+    "MIDTRANS_IS_PRODUCTION": "false"
   }
 }
