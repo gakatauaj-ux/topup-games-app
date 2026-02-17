@@ -1,0 +1,14 @@
+{
+  "buildCommand": "prisma generate && next build",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "env": {
+    "NEXTAUTH_URL": "@nextauth_url",
+    "NEXTAUTH_SECRET": "@nextauth_secret",
+    "DATABASE_URL": "@database_url",
+    "DIRECT_URL": "@direct_url",
+    "MIDTRANS_SERVER_KEY": "@midtrans_server_key",
+    "MIDTRANS_CLIENT_KEY": "@midtrans_client_key",
+    "MIDTRANS_IS_PRODUCTION": "@midtrans_is_production"
+  }
+}
