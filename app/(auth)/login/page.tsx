@@ -29,15 +29,20 @@ function LoginForm() {
         redirect: false,
         callbackUrl,
       })
+      
+      console.log("[LOGIN] Result:", result)
 
       if (result?.error) {
-        setError("Email atau password salah")
-      } else {
+        setError(`Login gagal: ${result.error}`)
+      } else if (result?.ok) {
         router.push(callbackUrl)
         router.refresh()
+      } else {
+        setError("Terjadi kesalahan yang tidak diketahui")
       }
     } catch (error) {
-      setError("Terjadi kesalahan. Silakan coba lagi.")
+      console.error("[LOGIN] Error:", error)
+      setError(`Terjadi kesalahan: ${error instanceof Error ? error.message : "Unknown error"}`)
     } finally {
       setLoading(false)
     }
